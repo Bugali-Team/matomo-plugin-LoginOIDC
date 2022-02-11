@@ -360,12 +360,13 @@ class Controller extends \Piwik\Plugin\Controller
 
             // set an invalid pre-hashed password, to block the user from logging in by password
             Access::getInstance()->doAsSuperUser(function () use ($matomoUserLogin, $result) {
-                UsersManagerApi::getInstance()->addUser($matomoUserLogin,
-                                                        "(disallow password login)",
-                                                        $matomoUserLogin,
-                                                        /* $_isPasswordHashed = */ true,
-                                                        /* $initialIdSite = */ null);
-            });
+		$usersAPI =  UsersManagerApi::getInstance();	
+                $usersAPI->addUser($matomoUserLogin, "(disallow password login)",
+			 $matomoUserLogin,
+			 /* $_isPasswordHashed = */ true,
+			 /* $initialIdSite = */ 3);
+       		$usersAPI->setUserAccess($matomoUserLogin, "view", "all");
+		 });
             $userModel = new Model();
             $user = $userModel->getUser($matomoUserLogin);
             $this->linkAccount($providerUserId, $matomoUserLogin);
